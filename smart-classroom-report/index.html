@@ -399,26 +399,6 @@
     </div>
   </section>
 
-  <!-- ================= VIDEO SCRIPT ================= -->
-  <section id="video">
-    <div class="wrap">
-      <p class="section-tag">Video walkthrough script</p>
-      <h2>3–4 minute recording guide</h2>
-      <div class="script-block">
-        <h4>0:00 – 0:30 · The Problem</h4>
-        <p>"Most classrooms still run on manual routine — roll-call attendance, manual light switches, and no way to know if a class is engaged until it's over. I built an object model for a Smart Classroom that automates all three."</p>
-        <h4>0:30 – 1:15 · The Class Design</h4>
-        <p>"Here's the class diagram. Person is the parent of Student, Teacher and Admin — they share fields but differ in permissions. Device is the parent of Camera and RFIDReader. Classroom composes its Devices — delete the room, the devices go with it — but only aggregates its Students, who exist independently of any one room."</p>
-        <h4>1:15 – 2:15 · Live Demo</h4>
-        <p>"On the project page, this Classroom panel is literally built from those classes. Watch: I click Take Attendance, and it creates real AttendanceRecord objects for each present student. Now I run an engagement check — the AIEngine scores it, and if it drops below 50, NotificationService fires an alert, without AIEngine ever needing to know how the notification actually gets delivered."</p>
-        <h4>2:15 – 3:00 · Why It Matters</h4>
-        <p>"Because these classes are loosely coupled, I can test AIEngine with a fake Device, and add a brand-new sensor type without touching Classroom at all — that's the Open/Closed Principle in practice."</p>
-        <h4>3:00 – 3:30 · Future Scope &amp; Close</h4>
-        <p>"From here this scales to predictive dropout-risk models, multi-campus cloud deployment, and new IoT sensors — all without redesigning the core model. Thanks for watching."</p>
-      </div>
-    </div>
-  </section>
-
 </main>
 
 <footer>
