@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI-Based Smart Classroom Management System — Project Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFF3F7; --card:#FFFFFF; --ink:#101826;
+    --navy:#16324F; --navy-2:#0E2439; --teal:#1CA79A; --teal-soft:#DEF3F0;
+    --amber:#DE9A34; --amber-soft:#FBEBD3; --slate:#5A6B82; --line:#D8E0E8;
+    --danger:#C1473A; --danger-soft:#FBE3E0;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); font-family:'Inter',sans-serif; color:var(--ink);}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0 0 10px;}
+  code, .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--teal);}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+  p{line-height:1.65; color:#33404F; font-size:15px;}
+
+  /* ---- NAV ---- */
+  nav{
+    position:sticky; top:0; z-index:20; background:rgba(16,24,38,.94); backdrop-filter:blur(6px);
+    border-bottom:1px solid #223349;
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:12px 28px; flex-wrap:wrap; gap:10px;}
+  nav .brand{color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; letter-spacing:.02em;}
+  nav .links{display:flex; gap:20px; flex-wrap:wrap;}
+  nav .links a{color:#C9D6E2; text-decoration:none; font-size:13.5px; font-family:'IBM Plex Mono',monospace;}
+  nav .links a:hover{color:var(--teal);}
+
+  /* ---- HERO ---- */
+  header.hero{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%); color:#F4F8FB;
+    padding:56px 0 46px; position:relative; overflow:hidden; border-bottom:5px solid var(--teal);
+  }
+  header.hero::after{
+    content:""; position:absolute; right:-80px; top:-100px; width:380px; height:380px;
+    border-radius:50%; background:radial-gradient(circle, rgba(28,167,154,.28) 0%, rgba(28,167,154,0) 70%);
+  }
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--teal); margin-bottom:12px;}
+  header.hero h1{font-size:clamp(28px,4.4vw,46px); line-height:1.08; max-width:760px;}
+  header.hero p.lead{font-size:16.5px; color:#C9D6E2; max-width:640px; margin-top:14px;}
+  .metabar{display:flex; flex-wrap:wrap; gap:10px 26px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:#DCE6EE; border-top:1px solid rgba(255,255,255,.18); padding-top:16px; margin-top:26px;}
+  .metabar b{color:#fff;}
+
+  /* ---- SECTIONS ---- */
+  main section{padding:52px 0;}
+  main section:nth-of-type(even){background:#F5F8FB;}
+  .section-tag{display:inline-flex; align-items:center; gap:7px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); font-weight:600; margin-bottom:10px;}
+  .section-tag::before{content:""; width:7px; height:7px; background:var(--teal); border-radius:1px; display:inline-block;}
+
+  .two-col{display:grid; grid-template-columns:1.1fr .9fr; gap:26px;}
+  @media (max-width:860px){.two-col{grid-template-columns:1fr;}}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px;}
+  .grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px;}
+  @media (max-width:900px){.grid4{grid-template-columns:repeat(2,1fr);}}
+  .rel-card{border:1px solid var(--line); border-radius:10px; padding:14px 15px; background:#FBFDFE;}
+  .rel-card h4{font-size:14px; display:flex; align-items:center; gap:8px;}
+  .glyph{width:20px;height:20px;border-radius:5px;flex:none;display:inline-flex;align-items:center;justify-content:center; font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#fff;}
+  .g1{background:var(--navy);} .g2{background:var(--teal);} .g3{background:var(--amber);} .g4{background:#7A6BC9;}
+  .rel-card p{font-size:12.8px; margin:6px 0 0;}
+  .rel-card code{font-family:'IBM Plex Mono',monospace; font-size:11.4px; background:var(--teal-soft); color:#0E4841; padding:2px 6px; border-radius:5px; display:inline-block; margin-top:6px;}
+
+  .qa-list{display:grid; gap:12px; margin-top:6px;}
+  .qa-item{display:flex; gap:12px;}
+  .qa-num{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; color:#fff; background:var(--navy); border-radius:50%; width:22px; height:22px; flex:none; display:flex; align-items:center; justify-content:center; margin-top:2px;}
+  .qa-item p{margin:0; font-size:13.8px;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .chip{font-family:'IBM Plex Mono',monospace; font-size:12px; padding:6px 12px; border-radius:999px; background:var(--amber-soft); color:#7A4E10; border:1px solid #EFCE97;}
+
+  /* ---- DIAGRAMS ---- */
+  .diagram-card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 22px 18px;}
+  .diagram-card svg{width:100%; height:auto; display:block;}
+  .legend{display:flex; flex-wrap:wrap; gap:16px; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--slate);}
+  .legend span{display:inline-flex; align-items:center; gap:7px;}
+  .legend svg{width:26px; height:16px;}
+
+  /* ---- FUTURE SCOPE ---- */
+  .future-item{border:1px solid var(--line); border-radius:10px; padding:16px; background:#FBFDFE;}
+  .future-item .fi{width:30px;height:30px;border-radius:8px;background:var(--navy); color:var(--teal); display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:8px; font-family:'IBM Plex Mono',monospace; font-weight:600;}
+  .future-item h4{font-size:13.5px; margin-bottom:5px;}
+  .future-item p{font-size:12.4px; margin:0; color:#4A5768;}
+
+  /* ---- DEMO ---- */
+  .demo-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:18px;}
+  @media (max-width:940px){.demo-grid{grid-template-columns:1fr;}}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 18px 16px; display:flex; flex-direction:column;}
+  .panel h3{font-size:15px; display:flex; align-items:center; gap:8px;}
+  .panel h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);}
+  .roster{list-style:none; margin:10px 0; padding:0; font-size:13px;}
+  .roster li{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--line);}
+  .roster li:last-child{border-bottom:none;}
+  .badge{font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:2px 7px; border-radius:999px;}
+  .badge.present{background:var(--teal-soft); color:#0E4841;}
+  .badge.absent{background:#F1F3F6; color:#5A6B82;}
+  .device-list{list-style:none; margin:8px 0 14px; padding:0; font-size:12.6px; color:#33404F;}
+  .device-list li{padding:5px 0; font-family:'IBM Plex Mono',monospace;}
+  button.btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px; color:#fff;
+    background:var(--navy); border:none; border-radius:8px; padding:10px 14px; cursor:pointer; margin-top:auto;
+  }
+  button.btn:hover{background:var(--navy-2);}
+  button.btn.amber{background:var(--amber);}
+  button.btn.amber:hover{background:#C4841F;}
+  .gauge-wrap{margin:14px 0; text-align:center;}
+  .gauge-num{font-family:'Space Grotesk',sans-serif; font-size:38px; font-weight:700;}
+  .gauge-label{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--slate); text-transform:uppercase; letter-spacing:.06em;}
+  .gauge-bar{height:8px; background:#E7ECF1; border-radius:99px; overflow:hidden; margin-top:8px;}
+  .gauge-fill{height:100%; background:var(--teal); width:70%; transition:width .5s ease, background .5s ease;}
+  .log{list-style:none; margin:10px 0 0; padding:0; font-size:12.4px; max-height:230px; overflow-y:auto; flex:1;}
+  .log li{padding:8px 9px; border-radius:7px; margin-bottom:7px; background:#F5F8FB; border:1px solid var(--line);}
+  .log li.alert{background:var(--danger-soft); border-color:#F0C6C0; color:#7A2A20;}
+  .log li .t{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--slate); display:block; margin-bottom:2px;}
+  .empty-log{font-size:12.5px; color:var(--slate); font-style:italic;}
+  .src-note{font-size:11.8px; color:var(--slate); margin-top:14px; font-family:'IBM Plex Mono',monospace;}
+
+  /* ---- VIDEO SCRIPT ---- */
+  .script-block{background:var(--navy); color:#EAF1F6; border-radius:12px; padding:22px 24px;}
+  .script-block h4{color:#fff; font-size:14px; margin:16px 0 6px;}
+  .script-block h4:first-of-type{margin-top:0;}
+  .script-block p{color:#C9D6E2; font-size:13.6px;}
+
+  footer{padding:26px 0 40px; text-align:center; color:var(--slate); font-size:12.8px; font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">Smart Classroom · OOD Project</div>
+    <div class="links">
+      <a href="#overview">Overview</a>
+      <a href="#diagrams">Diagrams</a>
+      <a href="#demo">Live Demo</a>
+      <a href="#future">Future Scope</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">B.E. Computer Engineering · Object-Oriented Software Design</p>
+    <h1>AI-Based Smart Classroom Management System</h1>
+    <p class="lead">Full project report, class &amp; relational diagrams, and a live in-browser demo of the object model in action — the page behind the QR code on the poster.</p>
+    <div class="metabar">
+      <span><b>Macwan Aron Wilson</b></span>
+      <span>Roll No. 202303103510062</span>
+      <span>OOD Focus: Classes &amp; Relationships</span>
+      <span>AMTICS, Uka Tarsadia University</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= OVERVIEW ================= -->
+  <section id="overview">
+    <div class="wrap two-col">
+      <div>
+        <p class="section-tag">Real-world scenario</p>
+        <h2>Why a classroom needs an object model</h2>
+        <p>Most classrooms still run on manual routine: a teacher calls out names for attendance, walks to a switch to fix the lighting, and only notices a disengaged back row once the lecture has ended. A Smart Classroom Management System puts a layer of sensors and software between the room and the people in it — a camera confirms who's present, environment sensors keep the room comfortable automatically, and an AI engine watches attendance and engagement trends, alerting a teacher or admin only when something genuinely needs attention.</p>
+        <p>None of that automation holds together without a clean object model underneath it. This project designs exactly that: the <b>classes</b> the system is built from, and the <b>relationships</b> that decide who owns whom, who merely knows whom, and who can be swapped out without breaking anything else.</p>
+      </div>
+      <div class="card">
+        <p class="section-tag">OOD focus: classes &amp; relationships</p>
+        <div class="grid4" style="grid-template-columns:1fr;">
+          <div class="rel-card"><h4><span class="glyph g1">▽</span>Inheritance</h4><p>Person, Camera and RFIDReader don't repeat shared fields — they extend an abstract parent that already defines them.</p><code>Person → Student / Teacher / Admin</code></div>
+          <div class="rel-card"><h4><span class="glyph g2">◆</span>Composition</h4><p>A device belongs to exactly one classroom — delete the room, its devices go with it.</p><code>Classroom *— Device</code></div>
+          <div class="rel-card"><h4><span class="glyph g3">◇</span>Aggregation</h4><p>A student is assigned to a classroom, not owned by it — the same object outlives any one room.</p><code>Classroom o— Student</code></div>
+          <div class="rel-card"><h4><span class="glyph g4">—</span>Association</h4><p>AIEngine, AttendanceRecord and NotificationService collaborate through calls, with no ownership at all.</p><code>AIEngine — NotificationService</code></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DIAGRAMS ================= -->
+  <section id="diagrams">
+    <div class="wrap">
+      <p class="section-tag">UML class diagram</p>
+      <h2>Class &amp; relationship model</h2>
+      <div class="diagram-card">
+        <svg viewBox="-20 -20 1150 900" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="triH" markerWidth="16" markerHeight="16" refX="13" refY="6" orient="auto"><path d="M1,1 L13,6 L1,11 Z" fill="#EFF3F7" stroke="#16324F" stroke-width="1.4" stroke-linejoin="round"/></marker>
+            <marker id="diaH" markerWidth="20" markerHeight="14" refX="17" refY="7" orient="auto"><path d="M1,7 L10,1 L19,7 L10,13 Z" fill="#EFF3F7" stroke="#16324F" stroke-width="1.4" stroke-linejoin="round"/></marker>
+            <marker id="diaF" markerWidth="20" markerHeight="14" refX="17" refY="7" orient="auto"><path d="M1,7 L10,1 L19,7 L10,13 Z" fill="#16324F" stroke="#16324F" stroke-width="1"/></marker>
+            <marker id="arrOpen" markerWidth="14" markerHeight="14" refX="11" refY="6" orient="auto"><path d="M1,1 L11,6 L1,11" fill="none" stroke="#16324F" stroke-width="1.5" stroke-linejoin="round"/></marker>
+          </defs>
+          <g stroke="#16324F" stroke-width="1.5" fill="none">
+            <line x1="105" y1="150" x2="220" y2="76" marker-end="url(#triH)"/>
+            <line x1="280" y1="150" x2="270" y2="76" marker-end="url(#triH)"/>
+            <line x1="450" y1="150" x2="320" y2="76" marker-end="url(#triH)"/>
+            <line x1="810" y1="150" x2="830" y2="76" marker-end="url(#triH)"/>
+            <line x1="980" y1="150" x2="970" y2="76" marker-end="url(#triH)"/>
+            <polyline points="710,310 710,100 900,100 900,76" marker-start="url(#diaF)"/>
+            <line x1="410" y1="310" x2="105" y2="210" marker-start="url(#diaH)"/>
+            <line x1="560" y1="280" x2="280" y2="210"/>
+            <line x1="560" y1="430" x2="560" y2="470"/>
+            <line x1="460" y1="610" x2="240" y2="680" marker-end="url(#arrOpen)"/>
+            <line x1="660" y1="610" x2="890" y2="680" marker-end="url(#arrOpen)"/>
+          </g>
+          <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#5A6B82">
+            <text x="128" y="200">1..*</text><text x="392" y="298">1</text><text x="716" y="292">1</text>
+            <text x="878" y="90">0..*</text><text x="325" y="222">1</text><text x="544" y="262">1</text>
+            <text x="300" y="655" font-style="italic">creates</text><text x="700" y="655" font-style="italic">triggers</text>
+          </g>
+          <g>
+            <rect x="170" y="20" width="200" height="56" rx="6" fill="#FBFDFE" stroke="#16324F" stroke-width="1.6"/>
+            <text x="270" y="38" text-anchor="middle" font-size="10" font-style="italic" fill="#5A6B82">«abstract»</text>
+            <text x="270" y="58" text-anchor="middle" font-size="15" font-weight="600" font-family="Space Grotesk, sans-serif">Person</text>
+          </g>
+          <g><rect x="30" y="150" width="150" height="60" rx="6" fill="#fff" stroke="#16324F" stroke-width="1.3"/><text x="105" y="172" text-anchor="middle" font-size="13.5" font-weight="600" font-family="Space Grotesk, sans-serif">Student</text><line x1="30" y1="182" x2="180" y2="182" stroke="#D8E0E8"/><text x="105" y="198" text-anchor="middle" font-size="10.5" font-family="IBM Plex Mono, monospace" fill="#5A6B82">- rollNo: String</text></g>
+          <g><rect x="210" y="150" width="140" height="60" rx="6" fill="#fff" stroke="#16324F" stroke-width="1.3"/><text x="280" y="172" text-anchor="middle" font-size="13.5" font-weight="600" font-family="Space Grotesk, sans-serif">Teacher</text><line x1="210" y1="182" x2="350" y2="182" stroke="#D8E0E8"/><text x="280" y="198" text-anchor="middle" font-size="10.5" font-family="IBM Plex Mono, monospace" fill="#5A6B82">- subject: String</text></g>
+          <g><rect x="380" y="150" width="140" height="60" rx="6" fill="#fff" stroke="#16324F" stroke-width="1.3"/><text x="450" y="172" text-anchor="middle" font-size="13.5" font-weight="600" font-family="Space Grotesk, sans-serif">Admin</text><line x1="380" y1="182" x2="520" y2="182" stroke="#D8E0E8"/><text x="450" y="198" text-anchor="middle" font-size="10.5" font-family="IBM Plex Mono, monospace" fill="#5A6B82">- accessLevel: int</text></g>
+          <g>
+            <rect x="800" y="20" width="200" height="56" rx="6" fill="#FBFDFE" stroke="#16324F" stroke-width="1.6"/>
+            <text x="900" y="38" text-anchor="middle" font-size="10" font-style="italic" fill="#5A6B82">«abstract»</text>
+            <text x="900" y="58" text-anchor="middle" font-size="15" font-weight="600" font-family="Space Grotesk, sans-serif">Device</text>
+          </g>
+          <g><rect x="740" y="150" width="140" height="60" rx="6" fill="#fff" stroke="#16324F" stroke-width="1.3"/><text x="810" y="172" text-anchor="middle" font-size="13.5" font-weight="600" font-family="Space Grotesk, sans-serif">Camera</text><line x1="740" y1="182" x2="880" y2="182" stroke="#D8E0E8"/><text x="810" y="198" text-anchor="middle" font-size="10.5" font-family="IBM Plex Mono, monospace" fill="#5A6B82">+ readData()</text></g>
+          <g><rect x="900" y="150" width="160" height="60" rx="6" fill="#fff" stroke="#16324F" stroke-width="1.3"/><text x="980" y="172" text-anchor="middle" font-size="13.5" font-weight="600" font-family="Space Grotesk, sans-serif">RFIDReader</text><line x1="900" y1="182" x2="1060" y2="182" stroke="#D8E0E8"/><text x="980" y="198" text-anchor="middle" font-size="10.5" font-family="IBM Plex Mono, monospace" fill="#5A6B82">+ readData()</text></g>
+          <g>
+            <rect x="410" y="280" width="300" height="150" rx="7" fill="#fff" stroke="#16324F" stroke-width="1.7"/>
+            <text x="560" y="304" text-anchor="middle" font-size="15" font-weight="700" font-family="Space Grotesk, sans-serif">Classroom</text>
+            <line x1="410" y1="316" x2="710" y2="316" stroke="#16324F" stroke-width="1"/>
+            <text x="424" y="334" font-size="11" font-family="IBM Plex Mono, monospace" fill="#33404F">- roomId: String</text>
+            <text x="424" y="350" font-size="11" font-family="IBM Plex Mono, monospace" fill="#33404F">- capacity: int</text>
+            <text x="424" y="366" font-size="11" font-family="IBM Plex Mono, monospace" fill="#33404F">- currentTemp: float</text>
+            <line x1="410" y1="376" x2="710" y2="376" stroke="#16324F" stroke-width="1"/>
+            <text x="424" y="394" font-size="11" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ assignTeacher(t)</text>
+            <text x="424" y="410" font-size="11" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ logAttendance(s)</text>
+          </g>
+          <g>
+            <rect x="430" y="470" width="260" height="140" rx="7" fill="#fff" stroke="#16324F" stroke-width="1.7"/>
+            <text x="560" y="493" text-anchor="middle" font-size="15" font-weight="700" font-family="Space Grotesk, sans-serif">AIEngine</text>
+            <line x1="430" y1="504" x2="690" y2="504" stroke="#16324F" stroke-width="1"/>
+            <text x="444" y="522" font-size="11" font-family="IBM Plex Mono, monospace" fill="#33404F">- engineId: String</text>
+            <text x="444" y="538" font-size="11" font-family="IBM Plex Mono, monospace" fill="#33404F">- model: String</text>
+            <line x1="430" y1="548" x2="690" y2="548" stroke="#16324F" stroke-width="1"/>
+            <text x="444" y="566" font-size="11" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ detectFace(feed)</text>
+            <text x="444" y="582" font-size="11" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ analyzeEngagement()</text>
+            <text x="444" y="598" font-size="11" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ triggerAlert(msg)</text>
+          </g>
+          <g>
+            <rect x="120" y="680" width="240" height="120" rx="7" fill="#fff" stroke="#16324F" stroke-width="1.7"/>
+            <text x="240" y="703" text-anchor="middle" font-size="14.5" font-weight="700" font-family="Space Grotesk, sans-serif">AttendanceRecord</text>
+            <line x1="120" y1="714" x2="360" y2="714" stroke="#16324F" stroke-width="1"/>
+            <text x="134" y="732" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#33404F">- studentId: String</text>
+            <text x="134" y="748" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#33404F">- timestamp: DateTime</text>
+            <line x1="120" y1="758" x2="360" y2="758" stroke="#16324F" stroke-width="1"/>
+            <text x="134" y="776" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ markPresent()</text>
+          </g>
+          <g>
+            <rect x="760" y="680" width="260" height="120" rx="7" fill="#fff" stroke="#16324F" stroke-width="1.7"/>
+            <text x="890" y="703" text-anchor="middle" font-size="14.5" font-weight="700" font-family="Space Grotesk, sans-serif">NotificationService</text>
+            <line x1="760" y1="714" x2="1020" y2="714" stroke="#16324F" stroke-width="1"/>
+            <text x="774" y="732" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#33404F">- queue: List&lt;Message&gt;</text>
+            <line x1="760" y1="742" x2="1020" y2="742" stroke="#16324F" stroke-width="1"/>
+            <text x="774" y="760" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ notifyTeacher(msg)</text>
+            <text x="774" y="776" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ notifyAdmin(msg)</text>
+            <text x="774" y="792" font-size="10.6" font-family="IBM Plex Mono, monospace" fill="#0E4841">+ sendAlert(msg)</text>
+          </g>
+        </svg>
+        <div class="legend">
+          <span><svg viewBox="0 0 26 16"><line x1="2" y1="8" x2="20" y2="8" stroke="#16324F" stroke-width="1.6"/><path d="M20,3 L26,8 L20,13 Z" fill="#EFF3F7" stroke="#16324F" stroke-width="1.4"/></svg> inheritance</span>
+          <span><svg viewBox="0 0 26 16"><line x1="2" y1="8" x2="14" y2="8" stroke="#16324F" stroke-width="1.6"/><path d="M14,8 L20,3 L26,8 L20,13 Z" fill="#16324F"/></svg> composition</span>
+          <span><svg viewBox="0 0 26 16"><line x1="2" y1="8" x2="14" y2="8" stroke="#16324F" stroke-width="1.6"/><path d="M14,8 L20,3 L26,8 L20,13 Z" fill="#EFF3F7" stroke="#16324F" stroke-width="1.4"/></svg> aggregation</span>
+          <span><svg viewBox="0 0 26 16"><line x1="2" y1="8" x2="24" y2="8" stroke="#16324F" stroke-width="1.6"/></svg> association</span>
+        </div>
+      </div>
+
+      <p class="section-tag" style="margin-top:34px;">Relational diagram</p>
+      <h2>How the model maps to storage</h2>
+      <div class="diagram-card">
+        <svg viewBox="-40 -40 900 420" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+          <g font-family="IBM Plex Mono, monospace" font-size="11">
+            <!-- Teacher -->
+            <rect x="0" y="0" width="170" height="26" fill="#16324F"/><text x="85" y="18" fill="#fff" text-anchor="middle" font-weight="600">Teacher</text>
+            <rect x="0" y="26" width="170" height="70" fill="#fff" stroke="#16324F"/>
+            <text x="10" y="44" fill="#33404F">PK  teacherId</text><text x="10" y="60" fill="#33404F">    subject</text><text x="10" y="76" fill="#0E4841">FK  roomId</text>
+            <!-- Classroom -->
+            <rect x="365" y="0" width="170" height="26" fill="#16324F"/><text x="450" y="18" fill="#fff" text-anchor="middle" font-weight="600">Classroom</text>
+            <rect x="365" y="26" width="170" height="70" fill="#fff" stroke="#16324F"/>
+            <text x="375" y="44" fill="#33404F">PK  roomId</text><text x="375" y="60" fill="#33404F">    capacity</text><text x="375" y="76" fill="#33404F">    currentTemp</text>
+            <!-- Device -->
+            <rect x="730" y="0" width="170" height="26" fill="#16324F"/><text x="815" y="18" fill="#fff" text-anchor="middle" font-weight="600">Device</text>
+            <rect x="730" y="26" width="170" height="70" fill="#fff" stroke="#16324F"/>
+            <text x="740" y="44" fill="#33404F">PK  deviceId</text><text x="740" y="60" fill="#33404F">    type</text><text x="740" y="76" fill="#0E4841">FK  roomId</text>
+            <!-- Student -->
+            <rect x="0" y="230" width="170" height="26" fill="#16324F"/><text x="85" y="248" fill="#fff" text-anchor="middle" font-weight="600">Student</text>
+            <rect x="0" y="256" width="170" height="70" fill="#fff" stroke="#16324F"/>
+            <text x="10" y="274" fill="#33404F">PK  studentId</text><text x="10" y="290" fill="#33404F">    rollNo</text><text x="10" y="306" fill="#33404F">    name</text>
+            <!-- AttendanceRecord -->
+            <rect x="365" y="230" width="200" height="26" fill="#16324F"/><text x="465" y="248" fill="#fff" text-anchor="middle" font-weight="600">AttendanceRecord</text>
+            <rect x="365" y="256" width="200" height="100" fill="#fff" stroke="#16324F"/>
+            <text x="375" y="274" fill="#33404F">PK  recordId</text><text x="375" y="290" fill="#0E4841">FK  studentId</text><text x="375" y="306" fill="#0E4841">FK  roomId</text><text x="375" y="322" fill="#33404F">    timestamp</text><text x="375" y="338" fill="#33404F">    status</text>
+          </g>
+          <g stroke="#16324F" stroke-width="1.4" fill="none" font-family="IBM Plex Mono, monospace" font-size="10.5">
+            <line x1="170" y1="48" x2="365" y2="48"/><text x="230" y="42" fill="#5A6B82">1 -- 1</text>
+            <line x1="535" y1="48" x2="730" y2="48"/><text x="600" y="42" fill="#5A6B82">1 -- *</text>
+            <line x1="450" y1="96" x2="450" y2="230"/><text x="458" y="165" fill="#5A6B82">1 -- *</text>
+            <line x1="170" y1="280" x2="365" y2="280"/><text x="230" y="274" fill="#5A6B82">1 -- *</text>
+          </g>
+        </svg>
+        <p style="font-size:13px; color:#4A5768; margin-top:14px;">The same object model translated into storage: <code>roomId</code> and <code>studentId</code> become foreign keys, so one Classroom row can have many Device and AttendanceRecord rows, and one Student row can have many AttendanceRecord rows over time — the aggregation/composition decisions on the class diagram show up here as which table <em>owns</em> the foreign key.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= IMPACT / QA ================= -->
+  <section>
+    <div class="wrap two-col">
+      <div class="card">
+        <p class="section-tag">Impact &amp; quality assurance</p>
+        <h2>What this class structure buys the project</h2>
+        <div class="qa-list">
+          <div class="qa-item"><span class="qa-num">1</span><p><b>Isolated testing.</b> AIEngine is unit-tested against a fake Device that returns canned readings — no real camera or classroom required.</p></div>
+          <div class="qa-item"><span class="qa-num">2</span><p><b>Open/Closed Principle.</b> Adding an AirQualitySensor is one new Device subclass; Classroom and AIEngine stay untouched.</p></div>
+          <div class="qa-item"><span class="qa-num">3</span><p><b>Low coupling.</b> NotificationService only receives "send this message" — it has no idea an alert came from AIEngine.</p></div>
+          <div class="qa-item"><span class="qa-num">4</span><p><b>Scalability.</b> Classroom aggregates rather than owns Student, so one object can move between rooms without duplication.</p></div>
+        </div>
+        <p class="section-tag" style="margin-top:16px;">Principles applied</p>
+        <div class="chips">
+          <span class="chip">Encapsulation</span><span class="chip">Open/Closed Principle</span>
+          <span class="chip">Low Coupling</span><span class="chip">High Cohesion</span>
+          <span class="chip">Polymorphism via readData()</span>
+        </div>
+      </div>
+      <div class="card">
+        <p class="section-tag">Reading the model</p>
+        <h2>In plain terms</h2>
+        <p>Person, Student, Teacher and Admin form one inheritance ladder; Device, Camera and RFIDReader form another. Classroom <b>composes</b> its Devices (they don't exist without the room) but only <b>aggregates</b> its Students (who exist independently). AIEngine sits in between, reading device data and pushing results out through two plain associations — to AttendanceRecord and NotificationService — with no ownership in either direction.</p>
+        <p>The interactive demo below is built directly on top of this same class structure in JavaScript, so what you click is literally exercising these classes and relationships.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LIVE DEMO ================= -->
+  <section id="demo">
+    <div class="wrap">
+      <p class="section-tag">Live demo</p>
+      <h2>Classroom · AI Engine · Notifications</h2>
+      <p>A simulated Classroom with 5 Students (aggregated) and 2 Devices (composed), a Teacher (associated), and an AIEngine that checks engagement and fires alerts through NotificationService when things dip. Nothing here calls a real server — it's all running the object model client-side.</p>
+
+      <div class="demo-grid">
+        <div class="panel">
+          <h3><span class="dot"></span>Classroom-101</h3>
+          <p class="src-note" style="margin-top:0;">Teacher: Mrs. Rao &middot; Capacity: 5</p>
+          <ul class="roster" id="roster"></ul>
+          <p class="section-tag" style="margin-top:14px;">Devices (composed)</p>
+          <ul class="device-list" id="devices"></ul>
+          <button class="btn" id="attendanceBtn">Take Attendance</button>
+        </div>
+
+        <div class="panel">
+          <h3><span class="dot"></span>AIEngine</h3>
+          <div class="gauge-wrap">
+            <div class="gauge-label">Engagement Score</div>
+            <div class="gauge-num" id="engagementNum">--</div>
+            <div class="gauge-bar"><div class="gauge-fill" id="engagementFill"></div></div>
+          </div>
+          <p class="src-note">Score is derived from the last Take Attendance result — take attendance first</p>
+          <button class="btn amber" id="analyzeBtn">Run Engagement Check</button>
+        </div>
+
+        <div class="panel">
+          <h3><span class="dot"></span>NotificationService</h3>
+          <ul class="log" id="notifLog">
+            <li class="empty-log">No notifications yet — take attendance or run an engagement check.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FUTURE SCOPE ================= -->
+  <section id="future">
+    <div class="wrap">
+      <p class="section-tag">Future scope</p>
+      <h2>Where this model grows next</h2>
+      <div class="grid4">
+        <div class="future-item"><div class="fi">AI</div><h4>Predictive analytics</h4><p>Feed AttendanceRecord history into a model that flags dropout/disengagement risk early.</p></div>
+        <div class="future-item"><div class="fi">☁</div><h4>Cloud deployment</h4><p>One AIEngine instance serving many campuses, Classroom as a tenant-scoped resource.</p></div>
+        <div class="future-item"><div class="fi">IoT</div><h4>More sensors</h4><p>Air-quality, noise and lighting sensors join as new Device subclasses.</p></div>
+        <div class="future-item"><div class="fi">📱</div><h4>Mobile companion</h4><p>Teacher/Admin already extend Person — NotificationService just adds a push channel.</p></div>
+        <div class="future-item"><div class="fi">🎙</div><h4>Voice control</h4><p>A VoiceCommand Device subclass lets a teacher say "dim the lights" instead of touching a switch.</p></div>
+        <div class="future-item"><div class="fi">📊</div><h4>Analytics dashboard</h4><p>Aggregate attendance and engagement data across classrooms into weekly reports.</p></div>
+        <div class="future-item"><div class="fi">🌐</div><h4>Localisation</h4><p>NotificationService messages localised per Teacher/Admin preference.</p></div>
+        <div class="future-item"><div class="fi">LMS</div><h4>LMS integration</h4><p>AttendanceRecord syncs automatically into Google Classroom / Moodle gradebooks.</p></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Macwan Aron Wilson · 202303103510062 · AMTICS, Uka Tarsadia University · Object-Oriented Software Design
+</footer>
+
+<script>
+(function(){
+  // ---- The actual OOD model, implemented in JS, driving the demo ----
+  class Person{ constructor(name){ this.name = name; } }
+  class Student extends Person{ constructor(name, rollNo){ super(name); this.rollNo = rollNo; } }
+  class Teacher extends Person{ constructor(name, subject){ super(name); this.subject = subject; } }
+
+  class Device{ constructor(id){ this.id = id; } readData(){ return null; } }
+  class Camera extends Device{ readData(){ return "face-scan ok"; } }
+  class RFIDReader extends Device{ readData(){ return "tag scan ok"; } }
+
+  class AttendanceRecord{
+    constructor(student){ this.student = student; this.timestamp = new Date(); this.status = "present"; }
+  }
+
+  class NotificationService{
+    constructor(logEl){ this.logEl = logEl; }
+    _write(text, isAlert){
+      if(this.logEl.querySelector(".empty-log")) this.logEl.innerHTML = "";
+      const li = document.createElement("li");
+      if(isAlert) li.className = "alert";
+      const t = document.createElement("span");
+      t.className = "t";
+      t.textContent = new Date().toLocaleTimeString();
+      li.appendChild(t);
+      li.appendChild(document.createTextNode(text));
+      this.logEl.prepend(li);
+    }
+    notifyTeacher(msg){ this._write("→ Teacher: " + msg, false); }
+    notifyAdmin(msg){ this._write("→ Admin: " + msg, false); }
+    sendAlert(msg){ this._write("⚠ ALERT: " + msg, true); }
+  }
+
+  class AIEngine{
+    constructor(notificationService){ this.notificationService = notificationService; }
+    detectFace(devices){ return devices.map(d => d.readData()); }
+    // Engagement is grounded in the last attendance check: a fuller room reads as
+    // more engaged, plus a small variance so it isn't just attendance restated.
+    analyzeEngagement(classroom){
+      if(!classroom.lastAttendance){ return null; }
+      const total = classroom.lastAttendance.length;
+      const present = classroom.lastAttendance.filter(m => m.present).length;
+      const presentRatio = present / total;
+      const variance = Math.random() * 16 - 8; // ±8, small day-to-day fluctuation
+      const score = Math.round(presentRatio * 100 + variance);
+      return Math.max(0, Math.min(100, score));
+    }
+    triggerAlert(score){
+      this.notificationService.sendAlert("Engagement dropped to " + score + "% — check in on the class.");
+      this.notificationService.notifyAdmin("Low engagement flagged in Classroom-101 (" + score + "%).");
+    }
+  }
+
+  class Classroom{
+    constructor(roomId, teacher){
+      this.roomId = roomId;
+      this.teacher = teacher;      // association
+      this.devices = [];           // composition
+      this.students = [];          // aggregation
+      this.records = [];
+      this.lastAttendance = null;  // most recent Take Attendance result, used by AIEngine
+    }
+    addDevice(d){ this.devices.push(d); }      // composed: created by/for this room
+    assignStudent(s){ this.students.push(s); } // aggregated: exists independently
+    logAttendance(aiEngine){
+      aiEngine.detectFace(this.devices);
+      const marked = [];
+      this.students.forEach(s => {
+        const present = Math.random() > 0.18; // most students present, occasionally absent
+        if(present){ this.records.push(new AttendanceRecord(s)); }
+        marked.push({student: s, present});
+      });
+      this.lastAttendance = marked;
+      return marked;
+    }
+  }
+
+  // ---- Wire up the demo instances ----
+  const notifLog = document.getElementById("notifLog");
+  const notificationService = new NotificationService(notifLog);
+  const aiEngine = new AIEngine(notificationService);
+
+  const teacher = new Teacher("Mrs. Rao", "Computer Engineering");
+  const classroom = new Classroom("101", teacher);
+  classroom.addDevice(new Camera("CAM-01"));
+  classroom.addDevice(new RFIDReader("RFID-01"));
+  [["Aarav Shah","2023CE01"],["Diya Patel","2023CE02"],["Kabir Mehta","2023CE03"],["Isha Solanki","2023CE04"],["Neel Joshi","2023CE05"]]
+    .forEach(([name, roll]) => classroom.assignStudent(new Student(name, roll)));
+
+  const rosterEl = document.getElementById("roster");
+  const devicesEl = document.getElementById("devices");
+  function renderRoster(markedMap){
+    rosterEl.innerHTML = "";
+    classroom.students.forEach(s => {
+      const li = document.createElement("li");
+      const state = markedMap ? (markedMap.get(s) ? "present" : "absent") : null;
+      li.innerHTML = '<span>' + s.name + ' <span class="mono" style="color:#8a97a8;">(' + s.rollNo + ')</span></span>' +
+        (state ? '<span class="badge ' + state + '">' + state + '</span>' : '');
+      rosterEl.appendChild(li);
+    });
+  }
+  function renderDevices(){
+    devicesEl.innerHTML = "";
+    classroom.devices.forEach(d => {
+      const li = document.createElement("li");
+      li.textContent = "• " + d.constructor.name + " (" + d.id + ")";
+      devicesEl.appendChild(li);
+    });
+  }
+  renderRoster(null);
+  renderDevices();
+
+  document.getElementById("attendanceBtn").addEventListener("click", () => {
+    const marked = classroom.logAttendance(aiEngine);
+    const map = new Map(marked.map(m => [m.student, m.present]));
+    renderRoster(map);
+    const presentCount = marked.filter(m => m.present).length;
+    notificationService.notifyTeacher(presentCount + "/" + classroom.students.length + " students marked present.");
+  });
+
+  const engagementNum = document.getElementById("engagementNum");
+  const engagementFill = document.getElementById("engagementFill");
+  document.getElementById("analyzeBtn").addEventListener("click", () => {
+    const score = aiEngine.analyzeEngagement(classroom);
+    if(score === null){
+      notificationService.notifyTeacher("Take attendance first — engagement is derived from who's actually in the room.");
+      return;
+    }
+    engagementNum.textContent = score + "%";
+    engagementFill.style.width = score + "%";
+    engagementFill.style.background = score < 50 ? "#C1473A" : "#1CA79A";
+    if(score < 50){ aiEngine.triggerAlert(score); }
+    else { notificationService.notifyTeacher("Engagement steady at " + score + "%."); }
+  });
+})();
+</script>
+</body>
+</html>
